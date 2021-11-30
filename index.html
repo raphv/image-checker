@@ -3,32 +3,24 @@
 <head>
     <meta charset="utf-8">
     <title>Image Checker</title>
-    <style>
-      * { margin:0; padding: 0; }
-      main {
-        display: flex;
-        flex-wrap: wrap;
-      }
-      section {
-        flex: 500px 1 0;
-        margin: 1em;
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <p id="imagecheck-result"></p>
   <main>
-  <section>
-    <div style="border: 4px dashed #cccccc; padding: 10px;" id="imagecheck-dropzone">
-        <p>Drop an image here or click below to browse files</p>
+  <section id="dropzone-section">
+    <div style="" id="imagecheck-dropzone">
+        <h3>Drop an image here</h3>
+        <p>or click below to browse files</p>
         <input type="file" accept="image/*" id="imagecheck-input" />
+        <h4 id="imagecheck-status" class="waiting">No image yet…</h4>
     </div>    
   </section>
-  <section>
+  <section id="preview-section">
     <h3>Preview of your image:</h3>
-    <img id="imagecheck-preview" src="broken-image.svg" style="max-width: 200px; max-height: 120px;">
+    <img id="imagecheck-preview" src="image.svg">
   </section>
-  <section>
+  <section id="imagesize-section">
     <h3>Image pixel size</h3>
     <p>The width of the image is <strong id="image_width"></strong>px and the height is <strong id="image_height"></strong>px.</p>
     <p>This is how the image compares to different screen sizes.</p>
@@ -158,160 +150,53 @@
     </svg>
   </section>
   <section>
+    <h3>File weight</h3>
+    <p>The file size is <strong id="imagecheck-filesize">unknown</strong></p>
+    <table id="imagecheck-filesize-table">
+      <tbody>
+        <tr>
+          <th rowspan="3">Loading time on</th>
+          <td>Dialup (56 Kbps)</td>
+          <td id="imagecheck-time-56k">??</td>
+        </tr>
+        <tr>
+          <td>3G (7 Mbps)</td>
+          <td id="imagecheck-time-3g">??</td>
+        </tr>
+        <tr>
+          <td>4G/DSL (50 Mbps)</td>
+          <td id="imagecheck-time-4g">??</td>
+        </tr>
+        <tr>
+          <th rowspan="3">Number of files of this size that fit on</th>
+          <td>A 3½-inch floppy disk (1.44 MB)</td>
+          <td id="imagecheck-nb-fl">??</td>
+        </tr>
+        <tr>
+          <td>A CD (650 MB)</td>
+          <td id="imagecheck-nb-cd">??</td>
+        </tr>
+        <tr>
+          <td>Free tier of Google Drive (15GB)</td>
+          <td id="imagecheck-nb-gd">??</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
     <h3>File format</h3>
-    <h3></h3>
+    <p>The file format is <strong id="imagecheck-format">unknown</strong></p>
+    <ul id="imagecheck-format-features" class="">
+      <li class="webp-show jpeg-show success">Suitable for photos as it offers efficient lossy compression.</li>
+      <li class="webp-show png-show success">Suitable for logos, illustrations and geometric shapes as it offers lossless compression.</li>
+      <li class="svg-show success">Suitable for logos, illustrations and geometric shapes as it is a vector format.</li>
+      <li class="png-show error">Unsuitable for photos as it doesn't offer efficient lossy compression &ndash; prefer JPEG.</li>
+      <li class="svg-show error">Unsuitable for photos as it is a vector format &ndash; prefer JPEG.</li>
+      <li class="jpeg-show error">Unsuitable for logos, illustrations and geometric shapes as it uses lossy compression, which reduces quality &ndash; prefer PNG or SVG.</li>
+    </ul>
   </section>
   </main>
 
-    <script>
-const dropzone = document.getElementById('imagecheck-dropzone');
-const resultdiv = document.getElementById('imagecheck-result');
-const previewimg = document.getElementById('imagecheck-preview');
-const inputbtn = document.getElementById('imagecheck-input');
-const ratiogroup = document.getElementById('ratio_group');
-const imagesizerect = document.getElementById('image_dimensions_rect');
-const reader = new FileReader();
-
-let mimetype = 'unknown';
-let filesize = 'unknown';
-let filename = 'unknown';
-        
-function gcd (a, b) {
-   return (b == 0) ? a : gcd (b, a%b);
-}
-
-function encodeSVG(svgdata) {
-  svgdata = svgdata.replace(/"/g, `'`);
-  svgdata = svgdata.replace(/>\s{1,}</g, `><`);
-  svgdata = svgdata.replace(/\s{2,}</g, ` `);
-  svgdata = svgdata.replace(/[\r\n%#()<>?[\\\]^`{|}]/g, encodeURIComponent);
-  return svgdata;
-}
-
-function openFile(file) {
-    /* This is the callback triggered when opening a file,
-     * either from drag-and-drop or browsing file */
-    if (!file) {
-        console.log("No file");
-        resultdiv.textContent = "No file opened or dropped";
-        return;
-    }
-    let ftypeparts = file.type.split("/");
-    if (ftypeparts[0] !== "image") {
-        /* If the file is not an image, we discard it */
-        console.log("Not an image");
-        resultdiv.textContent = "File is not an image";
-        return;
-    }
-    mimetype = ftypeparts[1];
-    filesize = Math.round(file.size/1024) + ' KB';
-    filename = file.name;
-    reader.readAsDataURL(file);
-}
-
-reader.addEventListener('load', function() {
-  ratiogroup.setAttribute('visibility','hidden');
-	previewimg.src = reader.result;
-});
-
-previewimg.addEventListener('load', function() {
-  let width = previewimg.naturalWidth, height = previewimg.naturalHeight, whgcd = gcd(width, height), aspectratio = NaN, aspectratiotext = 'N/A';
-  if (width) {
-    aspectratio = width/height;
-    let ww = width/whgcd, hh = height/whgcd;
-    if (ww > 25) {
-      if (width > height) {
-        aspectratiotext = `${aspectratio.toFixed(3)}:1`;
-      } else {
-        aspectratiotext = `1:${(1/aspectratio).toFixed(3)}`;
-      }
-    } else {
-      aspectratiotext = `${ww}:${hh}`
-    }
-    document.getElementById('ratio_text').textContent = aspectratiotext;
-    let frameheight = Math.min(80, Math.sqrt(3600/aspectratio)), framewidth = aspectratio * frameheight;
-    if (framewidth > 80) {
-      framewidth = 80;
-      frameheight = 80/aspectratio;
-    }
-    let ratiorect = document.getElementById('ratio_rectangle');
-    ratiorect.setAttribute('x',-framewidth/2);
-    ratiorect.setAttribute('y',140-frameheight/2);
-    ratiorect.setAttribute('width',framewidth);
-    ratiorect.setAttribute('height',frameheight);
-    let xpos = Math.min(560,Math.max(40, 300*(1+Math.log(aspectratio))));
-    ratiogroup.setAttribute('transform',`translate(${xpos},0)`);
-    ratiogroup.setAttribute('visibility','visible');
-    imagesizerect.setAttribute('x',-width/2);
-    imagesizerect.setAttribute('y',-height/2);
-    imagesizerect.setAttribute('width',width);
-    imagesizerect.setAttribute('height',height);
-    imagesizerect.setAttribute('visibility','visible');
-  }
-  document.getElementById('image_width').textContent = width;
-  document.getElementById('image_height').textContent = height;
-  resultdiv.textContent = `MIME Type: ${mimetype}, File Size: ${filesize}`;
-});
-
-dropzone.addEventListener('dragenter', function(event) {
-  event.preventDefault();
-  event.dataTransfer.effectAllowed = 'copy';
-});
-dropzone.addEventListener('dragover', function(event) {
-  event.preventDefault();
-});
-dropzone.addEventListener('dragleave', function(event) {
-  event.preventDefault();
-});
-dropzone.addEventListener('drop', function(event) {
-  event.preventDefault();
-  if (event.dataTransfer.files.length) {
-     /* Is there a file that has been dropped?
-      * If yes, try to read it */
-     openFile(event.dataTransfer.files[0]);
-     return;
-  }
-  let htmldata = event.dataTransfer.getData("text/html");
-  if (htmldata) {
-    /* Is there a HTML snippet being dropped?
-     * If yes, let's try to find an <img> tag inside */
-    let htmltree = document.createElement('div');
-    htmltree.innerHTML = htmldata;
-    console.log(htmldata);
-    let imgel = htmltree.querySelector('img');
-    if (imgel) {
-      ratiogroup.setAttribute('visibility','hidden');
-      previewimg.src = imgel.src;
-      filesize = 'unknown';
-      mimetype = 'unknown';
-      return;
-    }
-    let svgel = htmltree.querySelector('svg');
-    if (svgel) {
-        let svgw = svgel.getAttribute('width'), svgh = svgel.getAttribute('height');
-        if (!(svgw && svgh)) {
-          let svgvb = svgel.getAttribute('viewBox');
-          if (svgvb) {
-            let vbitems = svgvb.split(" ");
-            if (vbitems.length >= 4) {
-              svgel.setAttribute('width', vbitems[2]);
-              svgel.setAttribute('height', vbitems[3]);
-            }
-          }
-        }
-        svgel.setAttribute('xmlns','http://www.w3.org/2000/svg');
-        let svgdata = svgel.outerHTML;
-        mimetype = 'svg';
-        filesize = Math.round(svgdata.length/1024) + ' KB';
-        ratiogroup.setAttribute('visibility','hidden');
-        previewimg.src = 'data:image/svg+xml,' + encodeSVG(svgdata);
-    }
-  }
-});
-inputbtn.addEventListener('change', function(event) {
-   event.preventDefault();
-   openFile(inputbtn.files[0]);
-});
-    </script>
+  <script src="image-checker.js"></script>
 </body>
 </html>
