@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Image Checker</title>
+    <style>
+      * { margin:0; padding: 0; }
+      main {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      section {
+        flex: 500px 1 0;
+        margin: 1em;
+      }
+    </style>
+</head>
+<body>
+  <p id="imagecheck-result"></p>
+  <main>
+  <section>
+    <div style="border: 4px dashed #cccccc; padding: 10px;" id="imagecheck-dropzone">
+        <p>Drop an image here or click below to browse files</p>
+        <input type="file" accept="image/*" id="imagecheck-input" />
+    </div>    
+  </section>
+  <section>
+    <h3>Preview of your image:</h3>
+    <img id="imagecheck-preview" src="broken-image.svg" style="max-width: 200px; max-height: 120px;">
+  </section>
+  <section>
+    <h3>Image pixel size</h3>
+    <p>The width of the image is <strong id="image_width"></strong>px and the height is <strong id="image_height"></strong>px.</p>
+    <p>This is how the image compares to different screen sizes.</p>
+    <svg viewBox="0 0 800 230" width="800" height="230" style="max-width: 100%; height: auto; display:  block; margin: .5em auto;">
+      <defs>
+        <rect x="-100" y="-100" width="200" height="200" id="image_dimensions_rect" visibility="hidden" />
+        <rect x="-187.5" y="-406" width="375" height="812" rx="10" ry="10" id="phone_pixel_rect"/>
+        <path d="M-150,0h300M0,-100v200" stroke="#808080" stroke-width="1" stroke-dasharray="2,2" id="grid" />
+        <clipPath id="phone_pixel_clip">
+          <use xlink:href="#phone_pixel_rect" />
+        </clipPath>
+        <clipPath id="phone_pixel_overclip">
+          <use xlink:href="#phone_pixel_rect" transform="scale(1.2)" />
+        </clipPath>
+        <rect x="-540" y="-405" width="1080" height="810" rx="10" ry="10" id="tablet_pixel_rect"/>
+        <clipPath id="tablet_pixel_clip">
+          <use xlink:href="#tablet_pixel_rect" />
+        </clipPath>
+        <clipPath id="tablet_pixel_overclip">
+          <use xlink:href="#tablet_pixel_rect" transform="scale(1.2)" />
+        </clipPath>
+        <rect x="-960" y="-540" width="1920" height="1080" rx="10" ry="10" id="hd_pixel_rect"/>
+        <clipPath id="hd_pixel_clip">
+          <use xlink:href="#hd_pixel_rect" />
+        </clipPath>
+        <clipPath id="hd_pixel_overclip">
+          <use xlink:href="#hd_pixel_rect" transform="scale(1.2)" />
+        </clipPath>
+        <rect x="-1920" y="-1080" width="3840" height="2160" rx="10" ry="10" id="uhd_pixel_rect"/>
+        <clipPath id="uhd_pixel_clip">
+          <use xlink:href="#uhd_pixel_rect" />
+        </clipPath>
+        <clipPath id="uhd_pixel_overclip">
+          <use xlink:href="#uhd_pixel_rect" transform="scale(1.2)" />
+        </clipPath>
+      </defs>
+      <g transform="translate(45,0)">
+        <text x="0" y="20" text-anchor="middle">iPhone</text>
+        <text x="0" y="35" text-anchor="middle">(375&times;812)</text>
+        <g transform="translate(0,130) scale(.2)">
+          <use xlink:href="#image_dimensions_rect" fill="#ff0000" opacity=".2" clip-path="url(#phone_pixel_overclip)" />
+          <use xlink:href="#phone_pixel_rect" stroke="#808080" stroke-width="50" />
+          <use xlink:href="#phone_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <g clip-path="url(#phone_pixel_clip)">
+            <use xlink:href="#image_dimensions_rect" fill="#ff0000" />
+            <use xlink:href="#grid" transform="scale(5)" />
+          </g>
+        </g>
+      </g>
+      <g transform="translate(210,0)">
+        <text x="0" y="20" text-anchor="middle">iPad</text>
+        <text x="0" y="35" text-anchor="middle">(1080&times;810)</text>
+        <g transform="translate(0,130) scale(.2)">
+          <use xlink:href="#image_dimensions_rect" fill="#0000ff" opacity=".2" clip-path="url(#tablet_pixel_overclip)" />
+          <use xlink:href="#tablet_pixel_rect" stroke="#808080" stroke-width="50" />
+          <use xlink:href="#tablet_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <g clip-path="url(#tablet_pixel_clip)">
+            <use xlink:href="#image_dimensions_rect" fill="#0000ff" />
+            <use xlink:href="#grid" transform="scale(5)" />
+          </g>
+        </g>
+      </g>
+      <g transform="translate(445,0)">
+        <text x="0" y="20" text-anchor="middle">HD Format</text>
+        <text x="0" y="35" text-anchor="middle">(1920&times;1080)</text>
+        <g transform="translate(0,130) scale(.1)">
+          <use xlink:href="#image_dimensions_rect" fill="#ff0000" opacity=".2" clip-path="url(#hd_pixel_overclip)" />
+          <use xlink:href="#hd_pixel_rect" stroke="#808080" stroke-width="80" />
+          <use xlink:href="#hd_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <g clip-path="url(#hd_pixel_clip)">
+            <use xlink:href="#image_dimensions_rect" fill="#ff0000" />
+            <use xlink:href="#grid" transform="scale(10)" />
+          </g>
+        </g>
+      </g>
+      <g transform="translate(675,0)">
+        <text x="0" y="20" text-anchor="middle">4K UHD</text>
+        <text x="0" y="35" text-anchor="middle">(3840&times;2160)</text>
+        <g transform="translate(0,130) scale(.06)">
+          <use xlink:href="#image_dimensions_rect" fill="#0000ff" opacity=".2" clip-path="url(#uhd_pixel_overclip)" />
+          <use xlink:href="#uhd_pixel_rect" stroke="#808080" stroke-width="100" />
+          <use xlink:href="#uhd_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <g clip-path="url(#uhd_pixel_clip)">
+            <use xlink:href="#image_dimensions_rect" fill="#0000ff" clip-path="url(#uhd_pixel_clip)" />
+            <use xlink:href="#grid" transform="scale(16.67)" />
+          </g>
+        </g>
+      </g>
+    </svg>
+  </section>
+  <section>
+    <h3>Image aspect ratio</h3>
+    <svg viewBox="0 0 600 180" width="600" height="180" style="max-width:100%; height: auto; display:  block; margin: .5em auto;">
+      <path stroke="#808080" d="M0,90l10,-5v10l-10,-5H600l-10,-5v10l10,-5"/>
+      <text text-anchor="start" x="5" y="70">vertical</text>
+      <g transform="translate(127.4,0)">
+        <rect fill="#ffffff" stroke="#808080" x="-22.5" y="0" rx="5" ry="5" width="45" height="80" />
+        <text text-anchor="middle" x="0" y="45">9:16</text>
+        <path fill="#808080" d="M0,90l8-10h-16z" />
+      </g>
+      <g transform="translate(213.7,0)">
+        <rect fill="#ffffff" stroke="#808080" x="-27" y="4" rx="5" ry="5" width="54" height="72" />
+        <text text-anchor="middle" x="0" y="45">3:4</text>
+        <path fill="#808080" d="M0,90l8-10h-16z" />
+      </g>
+      <g transform="translate(300,0)">
+        <rect fill="#ffffff" stroke="#808080" x="-30" y="10" rx="5" ry="5" width="60" height="60" />
+        <text text-anchor="middle" x="0" y="45">1:1</text>
+        <path fill="#808080" d="M0,90l8-10h-16z" />
+      </g>
+      <g transform="translate(386.3,0)">
+        <rect fill="#ffffff" stroke="#808080" x="-36" y="13" rx="5" ry="5" width="72" height="54" />
+        <text text-anchor="middle" x="0" y="45">4:3</text>
+        <path fill="#808080" d="M0,90l8-10h-16z" />
+      </g>
+      <g transform="translate(472.6,0)">
+        <rect fill="#ffffff" stroke="#808080" x="-40" y="17.5" rx="5" ry="5" width="80" height="45" />
+        <text text-anchor="middle" x="0" y="45">16:9</text>
+        <path fill="#808080" d="M0,90l8-10h-16z" />
+      </g>
+      <text text-anchor="end" x="595" y="70">horizontal</text>
+      <g id="ratio_group" visibility="hidden">
+        <rect id="ratio_rectangle" stroke="#800000" fill="#ffffff" rx="5" ry="5" />
+        <text text-anchor="middle" x="0" y="145" id="ratio_text">ratio</text>
+        <path fill="#800000" d="M0,90l8,10h-16z" />
+      </g>
+    </svg>
+  </section>
+  <section>
+    <h3>File format</h3>
+    <h3></h3>
+  </section>
+  </main>
+
+    <script>
+const dropzone = document.getElementById('imagecheck-dropzone');
+const resultdiv = document.getElementById('imagecheck-result');
+const previewimg = document.getElementById('imagecheck-preview');
+const inputbtn = document.getElementById('imagecheck-input');
+const ratiogroup = document.getElementById('ratio_group');
+const imagesizerect = document.getElementById('image_dimensions_rect');
+const reader = new FileReader();
+
+let mimetype = 'unknown';
+let filesize = 'unknown';
+let filename = 'unknown';
+        
+function gcd (a, b) {
+   return (b == 0) ? a : gcd (b, a%b);
+}
+
+function encodeSVG(svgdata) {
+  svgdata = svgdata.replace(/"/g, `'`);
+  svgdata = svgdata.replace(/>\s{1,}</g, `><`);
+  svgdata = svgdata.replace(/\s{2,}</g, ` `);
+  svgdata = svgdata.replace(/[\r\n%#()<>?[\\\]^`{|}]/g, encodeURIComponent);
+  return svgdata;
+}
+
+function openFile(file) {
+    /* This is the callback triggered when opening a file,
+     * either from drag-and-drop or browsing file */
+    if (!file) {
+        console.log("No file");
+        resultdiv.textContent = "No file opened or dropped";
+        return;
+    }
+    let ftypeparts = file.type.split("/");
+    if (ftypeparts[0] !== "image") {
+        /* If the file is not an image, we discard it */
+        console.log("Not an image");
+        resultdiv.textContent = "File is not an image";
+        return;
+    }
+    mimetype = ftypeparts[1];
+    filesize = Math.round(file.size/1024) + ' KB';
+    filename = file.name;
+    reader.readAsDataURL(file);
+}
+
+reader.addEventListener('load', function() {
+  ratiogroup.setAttribute('visibility','hidden');
+	previewimg.src = reader.result;
+});
+
+previewimg.addEventListener('load', function() {
+  let width = previewimg.naturalWidth, height = previewimg.naturalHeight, whgcd = gcd(width, height), aspectratio = NaN, aspectratiotext = 'N/A';
+  if (width) {
+    aspectratio = width/height;
+    let ww = width/whgcd, hh = height/whgcd;
+    if (ww > 25) {
+      if (width > height) {
+        aspectratiotext = `${aspectratio.toFixed(3)}:1`;
+      } else {
+        aspectratiotext = `1:${(1/aspectratio).toFixed(3)}`;
+      }
+    } else {
+      aspectratiotext = `${ww}:${hh}`
+    }
+    document.getElementById('ratio_text').textContent = aspectratiotext;
+    let frameheight = Math.min(80, Math.sqrt(3600/aspectratio)), framewidth = aspectratio * frameheight;
+    if (framewidth > 80) {
+      framewidth = 80;
+      frameheight = 80/aspectratio;
+    }
+    let ratiorect = document.getElementById('ratio_rectangle');
+    ratiorect.setAttribute('x',-framewidth/2);
+    ratiorect.setAttribute('y',140-frameheight/2);
+    ratiorect.setAttribute('width',framewidth);
+    ratiorect.setAttribute('height',frameheight);
+    let xpos = Math.min(560,Math.max(40, 300*(1+Math.log(aspectratio))));
+    ratiogroup.setAttribute('transform',`translate(${xpos},0)`);
+    ratiogroup.setAttribute('visibility','visible');
+    imagesizerect.setAttribute('x',-width/2);
+    imagesizerect.setAttribute('y',-height/2);
+    imagesizerect.setAttribute('width',width);
+    imagesizerect.setAttribute('height',height);
+    imagesizerect.setAttribute('visibility','visible');
+  }
+  document.getElementById('image_width').textContent = width;
+  document.getElementById('image_height').textContent = height;
+  resultdiv.textContent = `MIME Type: ${mimetype}, File Size: ${filesize}`;
+});
+
+dropzone.addEventListener('dragenter', function(event) {
+  event.preventDefault();
+  event.dataTransfer.effectAllowed = 'copy';
+});
+dropzone.addEventListener('dragover', function(event) {
+  event.preventDefault();
+});
+dropzone.addEventListener('dragleave', function(event) {
+  event.preventDefault();
+});
+dropzone.addEventListener('drop', function(event) {
+  event.preventDefault();
+  if (event.dataTransfer.files.length) {
+     /* Is there a file that has been dropped?
+      * If yes, try to read it */
+     openFile(event.dataTransfer.files[0]);
+     return;
+  }
+  let htmldata = event.dataTransfer.getData("text/html");
+  if (htmldata) {
+    /* Is there a HTML snippet being dropped?
+     * If yes, let's try to find an <img> tag inside */
+    let htmltree = document.createElement('div');
+    htmltree.innerHTML = htmldata;
+    console.log(htmldata);
+    let imgel = htmltree.querySelector('img');
+    if (imgel) {
+      ratiogroup.setAttribute('visibility','hidden');
+      previewimg.src = imgel.src;
+      filesize = 'unknown';
+      mimetype = 'unknown';
+      return;
+    }
+    let svgel = htmltree.querySelector('svg');
+    if (svgel) {
+        let svgw = svgel.getAttribute('width'), svgh = svgel.getAttribute('height');
+        if (!(svgw && svgh)) {
+          let svgvb = svgel.getAttribute('viewBox');
+          if (svgvb) {
+            let vbitems = svgvb.split(" ");
+            if (vbitems.length >= 4) {
+              svgel.setAttribute('width', vbitems[2]);
+              svgel.setAttribute('height', vbitems[3]);
+            }
+          }
+        }
+        svgel.setAttribute('xmlns','http://www.w3.org/2000/svg');
+        let svgdata = svgel.outerHTML;
+        mimetype = 'svg';
+        filesize = Math.round(svgdata.length/1024) + ' KB';
+        ratiogroup.setAttribute('visibility','hidden');
+        previewimg.src = 'data:image/svg+xml,' + encodeSVG(svgdata);
+    }
+  }
+});
+inputbtn.addEventListener('change', function(event) {
+   event.preventDefault();
+   openFile(inputbtn.files[0]);
+});
+    </script>
+</body>
+</html>
