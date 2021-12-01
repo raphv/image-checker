@@ -12,11 +12,11 @@ function gcd (a, b) {
 }
 
 function encodeSVG(svgdata) {
-  svgdata = svgdata.replace(/"/g, `'`);
+  svgdata = svgdata.replace(/'/g, `"`);
   svgdata = svgdata.replace(/>\s{1,}</g, `><`);
   svgdata = svgdata.replace(/\s{2,}</g, ` `);
   svgdata = svgdata.replace(/[\r\n%#()<>?[\\\]^`{|}]/g, encodeURIComponent);
-  return svgdata;
+  return `data:image/svg+xml,${svgdata}`;
 }
 
 function showStatus(statusclass, statustext) {
@@ -101,7 +101,7 @@ function secToClass(seconds) {
 
 function showFileDetails(filesize, mimetype) {
   let formatparts = mimetype.split(/[\/\+]/),
-    formatname = formatparts[formatparts.length - 1];
+    formatname = formatparts[1];
   document.getElementById('imagecheck-filesize').textContent = bytesToText(filesize);
   document.getElementById('imagecheck-format').textContent = formatname;
   document.getElementById('imagecheck-filesize-table').style.display = 'table';
@@ -175,6 +175,12 @@ dropzone.addEventListener('drop', function(event) {
      return;
   }
   let htmldata = event.dataTransfer.getData("text/html");
+  /* For debugging purposes
+  event.dataTransfer.types.forEach(function(t) {
+     console.log(t);
+     console.log(event.dataTransfer.getData(t));
+  });
+  */
   if (htmldata) {
     /* Is there a HTML snippet being dropped?
      * If yes, let's try to find an <img> tag inside */
@@ -212,11 +218,13 @@ dropzone.addEventListener('drop', function(event) {
           }
         }
         svgel.setAttribute('xmlns','http://www.w3.org/2000/svg');
+        svgel.removeAttribute('class');
+        svgel.removeAttribute('style');
         let svgdata = svgel.outerHTML;
         hideImageSize();
         showFileDetails(svgdata.length, 'image/svg+xml');
-        showStatus("waiting", `Checking inline SVG image`);
-        previewimg.src = 'data:image/svg+xml,' + encodeSVG(svgdata);
+        showStatus("waiting", `Checking inline SVG image (results may not be accurate)`);
+        previewimg.src = encodeSVG(svgdata);
         return;
     }
   }
