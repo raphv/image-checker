@@ -2,6 +2,13 @@
 body {
   font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+h1, h5 {
+  text-align: center;
+}
+h5 {
+  font-weight: normal;
+  font-style: italic;
+}
 main {
   display: flex;
   flex-wrap: wrap;
