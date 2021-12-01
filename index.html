@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Image Checker</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -24,7 +25,7 @@
     <h3>Image pixel size</h3>
     <p>The width of the image is <strong id="image_width"></strong>px and the height is <strong id="image_height"></strong>px.</p>
     <p>This is how the image compares to different screen sizes.</p>
-    <svg viewBox="0 0 800 230" width="800" height="230" style="max-width: 100%; height: auto; display:  block; margin: .5em auto;">
+    <svg viewBox="0 0 800 230" width="800" height="230">
       <defs>
         <rect x="-100" y="-100" width="200" height="200" id="image_dimensions_rect" visibility="hidden" />
         <rect x="-187.5" y="-406" width="375" height="812" rx="10" ry="10" id="phone_pixel_rect"/>
@@ -111,7 +112,7 @@
       </g>
     </svg>
   </section>
-  <section>
+  <section id="aspectratio-section">
     <h3>Image aspect ratio</h3>
     <svg viewBox="0 0 600 180" width="600" height="180" style="max-width:100%; height: auto; display:  block; margin: .5em auto;">
       <path stroke="#808080" d="M0,90l10,-5v10l-10,-5H600l-10,-5v10l10,-5"/>
@@ -149,9 +150,65 @@
       </g>
     </svg>
   </section>
-  <section>
+  <section id="format-section">
+    <h3>File format</h3>
+    <p>The file format is <strong id="imagecheck-format">unknown</strong></p>
+    <ul id="imagecheck-format-features" class="">
+      <li class="webp-show jpeg-show success">Suitable for photos as it offers efficient lossy compression.</li>
+      <li class="webp-show png-show success">Suitable for logos, illustrations and geometric shapes as it offers lossless compression.</li>
+      <li class="svg-show success">Suitable for logos, illustrations and geometric shapes as it is a vector format.</li>
+      <li class="png-show error">Unsuitable for photos as it doesn't offer efficient lossy compression &ndash; prefer JPEG.</li>
+      <li class="svg-show error">Unsuitable for photos as it is a vector format &ndash; prefer JPEG.</li>
+      <li class="jpeg-show error">Unsuitable for logos, illustrations and geometric shapes as it uses lossy compression, which reduces quality &ndash; prefer PNG or SVG.</li>
+    </ul>
+  </section>
+  <section id="filesize-section">
     <h3>File weight</h3>
     <p>The file size is <strong id="imagecheck-filesize">unknown</strong></p>
+    <svg viewBox="0 0 300 75" width="300" height="75" style="min-width: 50%">
+      <defs>
+        <linearGradient id="gradient">
+          <stop offset="30%" stop-color="#40CC40"/>
+          <stop offset="55%" stop-color="#FFFF80" />
+          <stop offset="80%" stop-color="#CC4040"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="5" width="300" height="20" fill="url(#gradient)" />
+      <g transform="translate(25,0)">
+        <path stroke="#808080" d="M0,0v30" />
+        <text x="0" y="50" text-anchor="middle">100</text>
+        <text x="0" y="65" text-anchor="middle">Bytes</text>
+      </g>
+      <g transform="translate(75,0)">
+        <path stroke="#808080" d="M0,0v30" />
+        <text x="0" y="50" text-anchor="middle">1</text>
+        <text x="0" y="65" text-anchor="middle">KB</text>
+      </g>
+      <g transform="translate(125,0)">
+        <path stroke="#808080" d="M0,0v30" />
+        <text x="0" y="50" text-anchor="middle">10</text>
+        <text x="0" y="65" text-anchor="middle">KB</text>
+      </g>
+      <g transform="translate(175,0)">
+        <path stroke="#808080" d="M0,0v30" />
+        <text x="0" y="50" text-anchor="middle">100</text>
+        <text x="0" y="65" text-anchor="middle">KB</text>
+      </g>
+      <g transform="translate(225,0)">
+        <path stroke="#808080" d="M0,0v30" />
+        <text x="0" y="50" text-anchor="middle">1</text>
+        <text x="0" y="65" text-anchor="middle">MB</text>
+      </g>
+      <g transform="translate(275,0)">
+        <path stroke="#808080" d="M0,0v30" />
+        <text x="0" y="50" text-anchor="middle">10</text>
+        <text x="0" y="65" text-anchor="middle">MB</text>
+      </g>
+      <g transform="translate(50,0)" id="filesize-marker" visibility="hidden">
+        <path stroke="#000080" fill="#ccccff" d="M-6,0l5,5v20l-5,5h12l-5,-5v-20l5,-5z"/>
+      </g>
+      
+    </svg>
     <table id="imagecheck-filesize-table">
       <tbody>
         <tr>
@@ -182,18 +239,6 @@
         </tr>
       </tbody>
     </table>
-  </section>
-  <section>
-    <h3>File format</h3>
-    <p>The file format is <strong id="imagecheck-format">unknown</strong></p>
-    <ul id="imagecheck-format-features" class="">
-      <li class="webp-show jpeg-show success">Suitable for photos as it offers efficient lossy compression.</li>
-      <li class="webp-show png-show success">Suitable for logos, illustrations and geometric shapes as it offers lossless compression.</li>
-      <li class="svg-show success">Suitable for logos, illustrations and geometric shapes as it is a vector format.</li>
-      <li class="png-show error">Unsuitable for photos as it doesn't offer efficient lossy compression &ndash; prefer JPEG.</li>
-      <li class="svg-show error">Unsuitable for photos as it is a vector format &ndash; prefer JPEG.</li>
-      <li class="jpeg-show error">Unsuitable for logos, illustrations and geometric shapes as it uses lossy compression, which reduces quality &ndash; prefer PNG or SVG.</li>
-    </ul>
   </section>
   </main>
 

@@ -47,11 +47,8 @@ function displayImageSize() {
       aspectratiotext = `${ww}:${hh}`
     }
     document.getElementById('ratio_text').textContent = aspectratiotext;
-    let frameheight = Math.min(80, Math.sqrt(3600/aspectratio)), framewidth = aspectratio * frameheight;
-    if (framewidth > 80) {
-      framewidth = 80;
-      frameheight = 80/aspectratio;
-    }
+    let frameheight = (aspectratio > 1) ? 80/aspectratio : 80,
+      framewidth = (aspectratio < 1) ? 80*aspectratio : 80;
     let ratiorect = document.getElementById('ratio_rectangle');
     ratiorect.setAttribute('x',-framewidth/2);
     ratiorect.setAttribute('y',140-frameheight/2);
@@ -91,9 +88,15 @@ function secToText(seconds) {
   if (mins == 1) parts.push(`1 minute`);
   if (mins < 4) {
     if (secs > 1) parts.push(`${secs} seconds`);
-    if (secs == 1) parts.push(`1 second`);
+    if (secs == 1) parts.push(`${seconds.toFixed(1)} second`);
   }
   return parts.join(" ");
+}
+
+function secToClass(seconds) {
+  if (seconds > 2) return "error";
+  if (seconds > .3) return "waiting";
+  return "success";
 }
 
 function showFileDetails(filesize, mimetype) {
@@ -105,10 +108,15 @@ function showFileDetails(filesize, mimetype) {
   document.getElementById('imagecheck-time-56k').textContent = secToText(filesize*8/56e3);
   document.getElementById('imagecheck-time-3g').textContent = secToText(filesize*8/7e6);
   document.getElementById('imagecheck-time-4g').textContent = secToText(filesize*8/50e6);
+  document.getElementById('imagecheck-time-56k').className = secToClass(filesize*8/56e3);
+  document.getElementById('imagecheck-time-3g').className = secToClass(filesize*8/7e6);
+  document.getElementById('imagecheck-time-4g').className = secToClass(filesize*8/50e6);
   document.getElementById('imagecheck-nb-fl').textContent = (Math.floor(1.44e6/filesize) || "can't fit");
   document.getElementById('imagecheck-nb-cd').textContent = Math.floor(650e6/filesize);
   document.getElementById('imagecheck-nb-gd').textContent = Math.floor(15e9/filesize);
   document.getElementById('imagecheck-format-features').className = formatname;
+  document.getElementById('filesize-marker').setAttribute('visibility', 'visible');
+  document.getElementById('filesize-marker').setAttribute('transform', `translate(${Math.log(filesize)*150/Math.log(1024)-75},0)`);
 }
 
 function hideFileDetails() {
@@ -116,6 +124,7 @@ function hideFileDetails() {
   document.getElementById('imagecheck-format').textContent = "unknown";
   document.getElementById('imagecheck-filesize-table').style.display = 'none';
   document.getElementById('imagecheck-format-features').className = '';
+  document.getElementById('filesize-marker').setAttribute('visibility', 'hidden');
 }
 
 function openFile(file) {
