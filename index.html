@@ -31,47 +31,50 @@
     <p>This is how the image compares to different screen sizes.</p>
     <svg viewBox="0 0 800 230" width="800" height="230">
       <defs>
-        <rect x="-100" y="-100" width="200" height="200" id="image_dimensions_rect" visibility="hidden" />
+        <g id="image_dimensions_g">
+          <rect x="-100" y="-100" width="200" height="200" id="image_dimensions_rect" fill="#0000ff" />
+          <image x="-100" y="-100" width="200" height="200" id="image_dimensions_image" />
+        </g>
         <rect x="-187.5" y="-406" width="375" height="812" rx="10" ry="10" id="phone_pixel_rect"/>
         <path d="M-150,0h300M0,-100v200" stroke="#808080" stroke-width="1" stroke-dasharray="2,2" id="grid" />
         <clipPath id="phone_pixel_clip">
-          <use xlink:href="#phone_pixel_rect" />
+          <use href="#phone_pixel_rect" />
         </clipPath>
         <clipPath id="phone_pixel_overclip">
-          <use xlink:href="#phone_pixel_rect" transform="scale(1.2)" />
+          <use href="#phone_pixel_rect" transform="scale(1.2)" />
         </clipPath>
         <rect x="-540" y="-405" width="1080" height="810" rx="10" ry="10" id="tablet_pixel_rect"/>
         <clipPath id="tablet_pixel_clip">
-          <use xlink:href="#tablet_pixel_rect" />
+          <use href="#tablet_pixel_rect" />
         </clipPath>
         <clipPath id="tablet_pixel_overclip">
-          <use xlink:href="#tablet_pixel_rect" transform="scale(1.2)" />
+          <use href="#tablet_pixel_rect" transform="scale(1.2)" />
         </clipPath>
         <rect x="-960" y="-540" width="1920" height="1080" rx="10" ry="10" id="hd_pixel_rect"/>
         <clipPath id="hd_pixel_clip">
-          <use xlink:href="#hd_pixel_rect" />
+          <use href="#hd_pixel_rect" />
         </clipPath>
         <clipPath id="hd_pixel_overclip">
-          <use xlink:href="#hd_pixel_rect" transform="scale(1.2)" />
+          <use href="#hd_pixel_rect" transform="scale(1.2)" />
         </clipPath>
         <rect x="-1920" y="-1080" width="3840" height="2160" rx="10" ry="10" id="uhd_pixel_rect"/>
         <clipPath id="uhd_pixel_clip">
-          <use xlink:href="#uhd_pixel_rect" />
+          <use href="#uhd_pixel_rect" />
         </clipPath>
         <clipPath id="uhd_pixel_overclip">
-          <use xlink:href="#uhd_pixel_rect" transform="scale(1.2)" />
+          <use href="#uhd_pixel_rect" transform="scale(1.2)" />
         </clipPath>
       </defs>
       <g transform="translate(45,0)">
         <text x="0" y="20" text-anchor="middle">iPhone</text>
         <text x="0" y="35" text-anchor="middle">(375&times;812)</text>
         <g transform="translate(0,130) scale(.2)">
-          <use xlink:href="#image_dimensions_rect" fill="#ff0000" opacity=".2" clip-path="url(#phone_pixel_overclip)" />
-          <use xlink:href="#phone_pixel_rect" stroke="#808080" stroke-width="50" />
-          <use xlink:href="#phone_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <use href="#image_dimensions_g" opacity=".2" clip-path="url(#phone_pixel_overclip)" />
+          <use href="#phone_pixel_rect" stroke="#808080" stroke-width="50" />
+          <use href="#phone_pixel_rect" fill="#f0f0f0" stroke="none" />
           <g clip-path="url(#phone_pixel_clip)">
-            <use xlink:href="#image_dimensions_rect" fill="#ff0000" />
-            <use xlink:href="#grid" transform="scale(5)" />
+            <use href="#image_dimensions_g" />
+            <use href="#grid" transform="scale(5)" />
           </g>
         </g>
       </g>
@@ -79,12 +82,12 @@
         <text x="0" y="20" text-anchor="middle">iPad</text>
         <text x="0" y="35" text-anchor="middle">(1080&times;810)</text>
         <g transform="translate(0,130) scale(.2)">
-          <use xlink:href="#image_dimensions_rect" fill="#0000ff" opacity=".2" clip-path="url(#tablet_pixel_overclip)" />
-          <use xlink:href="#tablet_pixel_rect" stroke="#808080" stroke-width="50" />
-          <use xlink:href="#tablet_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <use href="#image_dimensions_g" opacity=".2" clip-path="url(#tablet_pixel_overclip)" />
+          <use href="#tablet_pixel_rect" stroke="#808080" stroke-width="50" />
+          <use href="#tablet_pixel_rect" fill="#f0f0f0" stroke="none" />
           <g clip-path="url(#tablet_pixel_clip)">
-            <use xlink:href="#image_dimensions_rect" fill="#0000ff" />
-            <use xlink:href="#grid" transform="scale(5)" />
+            <use href="#image_dimensions_g" />
+            <use href="#grid" transform="scale(5)" />
           </g>
         </g>
       </g>
@@ -92,12 +95,12 @@
         <text x="0" y="20" text-anchor="middle">HD Format</text>
         <text x="0" y="35" text-anchor="middle">(1920&times;1080)</text>
         <g transform="translate(0,130) scale(.1)">
-          <use xlink:href="#image_dimensions_rect" fill="#ff0000" opacity=".2" clip-path="url(#hd_pixel_overclip)" />
-          <use xlink:href="#hd_pixel_rect" stroke="#808080" stroke-width="80" />
-          <use xlink:href="#hd_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <use href="#image_dimensions_g" opacity=".2" clip-path="url(#hd_pixel_overclip)" />
+          <use href="#hd_pixel_rect" stroke="#808080" stroke-width="80" />
+          <use href="#hd_pixel_rect" fill="#f0f0f0" stroke="none" />
           <g clip-path="url(#hd_pixel_clip)">
-            <use xlink:href="#image_dimensions_rect" fill="#ff0000" />
-            <use xlink:href="#grid" transform="scale(10)" />
+            <use href="#image_dimensions_g" />
+            <use href="#grid" transform="scale(10)" />
           </g>
         </g>
       </g>
@@ -105,12 +108,12 @@
         <text x="0" y="20" text-anchor="middle">4K UHD</text>
         <text x="0" y="35" text-anchor="middle">(3840&times;2160)</text>
         <g transform="translate(0,130) scale(.06)">
-          <use xlink:href="#image_dimensions_rect" fill="#0000ff" opacity=".2" clip-path="url(#uhd_pixel_overclip)" />
-          <use xlink:href="#uhd_pixel_rect" stroke="#808080" stroke-width="100" />
-          <use xlink:href="#uhd_pixel_rect" fill="#f0f0f0" stroke="none" />
+          <use href="#image_dimensions_g" opacity=".2" clip-path="url(#uhd_pixel_overclip)" />
+          <use href="#uhd_pixel_rect" stroke="#808080" stroke-width="100" />
+          <use href="#uhd_pixel_rect" fill="#f0f0f0" stroke="none" />
           <g clip-path="url(#uhd_pixel_clip)">
-            <use xlink:href="#image_dimensions_rect" fill="#0000ff" clip-path="url(#uhd_pixel_clip)" />
-            <use xlink:href="#grid" transform="scale(16.67)" />
+            <use href="#image_dimensions_g" clip-path="url(#uhd_pixel_clip)" />
+            <use href="#grid" transform="scale(16.67)" />
           </g>
         </g>
       </g>

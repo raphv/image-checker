@@ -3,6 +3,7 @@ const previewimg = document.getElementById('imagecheck-preview');
 const inputbtn = document.getElementById('imagecheck-input');
 const ratiogroup = document.getElementById('ratio_group');
 const imagesizerect = document.getElementById('image_dimensions_rect');
+const imagesizeimage = document.getElementById('image_dimensions_image');
 const statusline = document.getElementById('imagecheck-status');
 const reader = new FileReader();
 const defaultimage = previewimg.src;
@@ -19,6 +20,11 @@ function encodeSVG(svgdata) {
   return `data:image/svg+xml,${svgdata}`;
 }
 
+function loadImage(src) {
+  previewimg.src = src;
+  imagesizeimage.setAttribute('href', src);
+}
+
 function showStatus(statusclass, statustext) {
   statusline.className = statusclass;
   statusline.textContent = statustext; 
@@ -27,6 +33,7 @@ function showStatus(statusclass, statustext) {
 function hideImageSize() {
   ratiogroup.setAttribute('visibility','hidden');
   imagesizerect.setAttribute('visibility','hidden');
+  imagesizeimage.setAttribute('visibility','hidden');
 }
 
 function displayImageSize() {
@@ -62,6 +69,11 @@ function displayImageSize() {
     imagesizerect.setAttribute('width',width);
     imagesizerect.setAttribute('height',height);
     imagesizerect.setAttribute('visibility','visible');
+    imagesizeimage.setAttribute('x',-width/2);
+    imagesizeimage.setAttribute('y',-height/2);
+    imagesizeimage.setAttribute('width',width);
+    imagesizeimage.setAttribute('height',height);
+    imagesizeimage.setAttribute('visibility','visible');
   } else {
     hideImageSize();
   }
@@ -147,7 +159,7 @@ function openFile(file) {
 
 reader.addEventListener('load', function() {
   ratiogroup.setAttribute('visibility','hidden');
-	previewimg.src = reader.result;
+	loadImage(reader.result);
 });
 
 previewimg.addEventListener('load', function() {
@@ -201,7 +213,7 @@ dropzone.addEventListener('drop', function(event) {
         previewurl = `${previewurl.substr(0,20)}…${previewurl.substr(-20,20)}`
       }
       showStatus("waiting", `Checking "${previewurl}"`);
-      previewimg.src = imgel.src;
+      loadImage(previewimg.src);
       return;
     }
     let svgel = htmltree.querySelector('svg');
@@ -224,7 +236,7 @@ dropzone.addEventListener('drop', function(event) {
         hideImageSize();
         showFileDetails(svgdata.length, 'image/svg+xml');
         showStatus("waiting", `Checking inline SVG image (results may not be accurate)`);
-        previewimg.src = encodeSVG(svgdata);
+        loadImage(encodeSVG(svgdata));
         return;
     }
   }
