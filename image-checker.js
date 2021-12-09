@@ -213,7 +213,7 @@ dropzone.addEventListener('drop', function(event) {
         previewurl = `${previewurl.substr(0,20)}…${previewurl.substr(-20,20)}`
       }
       showStatus("waiting", `Checking "${previewurl}"`);
-      loadImage(previewimg.src);
+      loadImage(imgel.src);
       return;
     }
     let svgel = htmltree.querySelector('svg');
